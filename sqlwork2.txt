@@ -1,0 +1,519 @@
+1. Profile the data by finding the total number of records for each of the tables below:
+	/* For each table the Count(*) returns the total number of rows or records for each table */
+i. Attribute table = 10,000 records
+Code:
+SELECT Count(*) AS Attribute_Records
+FROM Attribute 
+ii. Business table = 10,000 records
+Code:
+SELECT Count(*) AS Business_Records
+FROM Business
+iii. Category table = 10,000 records
+Code:
+SELECT Count(*) AS Category_Records
+FROM Category
+iv. Checkin table = 10,000 records
+Code:
+SELECT Count(*) AS Checkin_Records
+FROM Checkin
+v. elite_years table = 10,000 records
+Code:
+SELECT Count(*) AS Elite_Years_Records
+FROM elite_years
+vi. friend table = 10,000 records
+Code:
+SELECT Count(*) AS Friend_Records
+FROM friend
+vii. hours table = 10,000 records
+Code:
+SELECT Count(*) AS Hours_Records
+FROM hours
+viii. photo table = 10,000 records
+Code
+SELECT Count(*) AS Photo_Records
+FROM photo
+ix. review table = 10,000 records
+Code
+SELECT Count(*) AS Review_Records
+FROM review
+x. tip table = 10,000 records
+Code
+SELECT Count(*) AS Tip_Records
+FROM tip
+xi. user table = 10,000 records
+Code
+SELECT Count(*) AS User_Records
+FROM user
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+/* Used the distinct function with count in order to get total distinct records. */
+
+i. Business = 10,000 records
+Code
+SELECT Count(DISTINCT id) AS New_Business
+FROM Business
+ii. Hours = 1,562 records
+Code
+SELECT Count(DISTINCT business_id) AS New_Hours
+FROM Hours
+iii. Category = 2,643 records
+Code
+SELECT Count(DISTINCT business_id) AS New_Category
+FROM Category
+iv. Attribute = 1,115 records
+Code
+SELECT Count(DISTINCT business_id) AS New_Attribute
+FROM Attribute
+v. Review = 10,000 records
+SELECT Count(DISTINCT id) AS New_Review
+FROM Review
+vi. Checkin = 493 records
+SELECT Count(DISTINCT business_id) AS New_Checkin
+FROM Checkin
+vii. Photo = 10,000 records
+SELECT Count(DISTINCT id) AS New_Photo
+FROM Photo
+viii. Tip = 537 records
+/* For tip I used user id as the foreign key */
+SELECT Count(DISTINCT user_id) AS New_Tip
+FROM Tip
+ix. User = 10,000 records
+SELECT Count(DISTINCT id) AS New_user
+FROM user
+x. Friend = 11 records
+SELECT Count(DISTINCT user_id) AS New_friend
+FROM friend
+xi. Elite_years = 2,780 records
+SELECT Count(DISTINCT user_id) AS New_elite_years
+FROM elite_years
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: No there are no columns with null values
+	
+	SQL code used to arrive at answer:
+        /* In order to do this the Count(*) gives the total number of rows from the dataset
+        and the Count(column_name) for each of the columns gives the number of null rows
+        for each column . So when we do Count(*)-Count(column_name) we get the total number
+        of null rows in each column, and I made each of these into a column name to more
+        easily view the data. */
+
+        SELECT Count(*) - Count(id) AS id_null_values,
+               Count(*) - Count(name) AS name_null_values,
+               Count(*) - Count(review_count) AS review_count_null_values,
+               Count(*) - Count(yelping_since) AS yelping_since_null_values,
+               Count(*) - Count(useful) AS useful_null_values,
+               Count(*) - Count(funny) AS funny_null_values,
+               Count(*) - Count(cool) AS cool_null_values,
+               Count(*) - Count(fans) AS fans_null_values,
+               Count(*) - Count(average_stars) AS average_stars_null_values,
+               Count(*) - Count(compliment_hot) AS compliment_hot_null_values,
+               Count(*) - Count(compliment_more) AS compliment_more_null_values,
+               Count(*) - Count(compliment_profile) AS compliment_profile_null_values,
+               Count(*) - Count(compliment_cute) AS compliment_cute_null_values,
+               Count(*) - Count(compliment_list) AS compliment_list_null_values,
+               Count(*) - Count(compliment_note) AS compliment_note_null_values,
+               Count(*) - Count(compliment_plain) AS compliment_plain_null_values,
+	       Count(*) - Count(compliment_cool) AS compliment_cool_null_values,
+               Count(*) - Count(compliment_funny) AS compliment_funny_null_values,
+               Count(*) - Count(compliment_writer) AS compliment_writer_null_values,
+               Count(*) - Count(compliment_photos) AS compliment_photos_null_values
+        FROM user 
+
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+/* Got min, max, and average of each column we are looking for and set them as columns */
+	i. Table: Review, Column: Stars
+	
+		min:	1  max:	5	avg: 3.7082
+	        
+                SELECT MIN(stars) AS Min_Stars,
+                       MAX(stars) AS Max_Stars,
+                       AVG(stars) AS Average_Stars
+                FROM review
+
+	ii. Table: Business, Column: Stars
+	
+		min:	1	max:	5	avg: 3.6549
+		
+	        SELECT MIN(stars) AS Min_Stars,
+                       MAX(stars) AS Max_Stars,
+                       AVG(stars) AS Average_Stars
+                FROM Business
+
+	iii. Table: Tip, Column: Likes
+	
+		min:	0	max:	2	avg: 0.0144
+		
+	       SELECT MIN(Likes) AS Min_Likes,
+                      MAX(Likes) AS Max_Likes,
+                      AVG(Likes) AS Average_Likes
+               FROM Tip
+
+	iv. Table: Checkin, Column: Count
+	
+		min:	1	max:	53	avg: 1.9414
+		
+	      SELECT MIN(Count) AS Min_Count,
+                     MAX(Count) AS Max_Count,
+                     AVG(Count) AS Average_Count
+              FROM Checkin
+
+	v. Table: User, Column: Review_count
+	
+		min:	0	max:	2,000	avg: 24.2995
+		
+           SELECT MIN(Review_Count) AS Min_Review_Count,
+                  MAX(Review_Count) AS Max_Review_Count,
+                  AVG(Review_Count) AS Average_Review_Count
+           FROM User
+
+5. List the cities with the most reviews in descending order:
+	SQL code used to arrive at answer:
+        /* First we want to select the city and count the total number of reviews as a counter and make it its own column,
+        both of these columns are from the business table. */
+	SELECT City,
+               COUNT(review_count) AS Total_Reviews
+        FROM Business
+        /* We then want to group by the city to get the reviews per city and it asks for reviews in descending order
+        so we have to order by descending order /*.
+        Group BY City
+        Order BY Total_Reviews DESC;
+	
+	Copy and Paste the Result Below:
+	
++-----------------+---------------+
+| city            | Total_Reviews |
++-----------------+---------------+
+| Las Vegas       |          1561 |
+| Phoenix         |          1001 |
+| Toronto         |           985 |
+| Scottsdale      |           497 |
+| Charlotte       |           468 |
+| Pittsburgh      |           353 |
+| Montréal        |           337 |
+| Mesa            |           304 |
+| Henderson       |           274 |
+| Tempe           |           261 |
+| Edinburgh       |           239 |
+| Chandler        |           232 |
+| Cleveland       |           189 |
+| Gilbert         |           188 |
+| Glendale        |           188 |
+| Madison         |           176 |
+| Mississauga     |           150 |
+| Stuttgart       |           141 |
+| Peoria          |           105 |
+| Markham         |            80 |
+| Champaign       |            71 |
+| North Las Vegas |            70 |
+| North York      |            64 |
+| Surprise        |            60 |
+| Richmond Hill   |            54 |
++-----------------+---------------+
+(Output limit exceeded, 25 of 362 total rows shown)
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+SQL code used to arrive at answer:
+/* First we want to select the Stars and count the total number of reviews and make it its own column,
+        both of these columns are from the business table. We also want to make sure we only select
+  stars from the city Avon so we have City = "Avon" and then we want to group by stars to get
+the frequency for each star category. */
+SELECT Stars,
+       COUNT(Stars) AS Star_Frequency
+FROM Business
+WHERE City = "Avon"
+GROUP BY Stars
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
++-------+----------------+
+| stars | Star_Frequency |
++-------+----------------+
+|   1.5 |              1 |
+|   2.5 |              2 |
+|   3.5 |              3 |
+|   4.0 |              2 |
+|   4.5 |              1 |
+|   5.0 |              1 |
++-------+----------------+
+
+
+       
+
+ii. Beachwood
+/* Similar process to before except we have "Beachwood" instead of "Avon" . */
+SQL code used to arrive at answer:
+SELECT Stars,
+       COUNT(Stars) AS Star_Frequency
+FROM Business
+WHERE City = "Beachwood"
+GROUP BY Stars
+
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
+		
++-------+----------------+
+| stars | Star_Frequency |
++-------+----------------+
+|   2.0 |              1 |
+|   2.5 |              1 |
+|   3.0 |              2 |
+|   3.5 |              2 |
+|   4.0 |              1 |
+|   4.5 |              2 |
+|   5.0 |              5 |
++-------+----------------+
+
+7. Find the top 3 users based on their total number of reviews:
+Top 3 users:
+Gerald
+Sara
+Yuri
+		
+	SQL code used to arrive at answer:
+/* First we select the columns we need like id, name, and review_count from the user table. */
+	SELECT id,
+               name,
+               review_count
+        From user
+/* Then we have to make sure we group by id to have no repeats in id as there can only be one unique id. */
+        GROUP BY id
+/* We then have to order by the total number of reviews in descending order to find the most popular users
+and then limit it to 3 so we only want the top 3 users */
+        ORDER BY review_count DESC
+        LIMIT 3
+
+	Copy and Paste the Result Below:
+		
++------------------------+--------+--------------+
+| id                     | name   | review_count |
++------------------------+--------+--------------+
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald |         2000 |
+| -3s52C4zL_DHRK0ULG6qtg | Sara   |         1629 |
+| -8lbUNlXVSoXqaRRiHiSNg | Yuri   |         1339 |
++------------------------+--------+--------------+
+
+8. Does posing more reviews correlate with more fans?
+ /* We select number of reviews and fans from the user table. Then we order by the review count in descending 
+order. In order to investigate whether more reviews correlates with more fans. */
+
+SELECT review_count,
+       fans
+FROM user
+ORDER BY review_count DESC
+
+	Please explain your findings and interpretation of the results:
+	
+No posing more revies does not correlate with more fans as there are points
+where there are less recies and more fans and vice versa.
+The reviews and fans do not seem to have a relation one way or another,
+so they have no correlation.
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer:
+        Yes there are more reviews with the word 'love' than with the word 'hate' in them.
+	
+	SQL code used to arrive at answer:
+        /* We create a new column called lovehate, and we want to count the total
+        number of rows using Count(*) from the column text which has the word love */
+	SELECT 'love' AS lovehate, COUNT(*) AS Count_hate_love
+        FROM review
+        WHERE text LIKE '%love%'
+        UNION
+        /* We do the same here except we use hate instead of love and we union these
+        two together and get a column called lovehate that has hate and love as rows
+        and another column Count_hate_love that contains number of reviews for hate and love. */
+        SELECT 'hate' AS lovehate, COUNT(*) AS Count_hate_love
+        FROM review
+        WHERE text LIKE '%hate%'
+
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+	/* We select fans and name from the user table */
+	SELECT fans,
+               name
+        FROM user
+        /* Then we order by number of fans in a descending order to get the top 10 users and we
+        use limit 10 to only get the top 10 and not others */
+        ORDER BY fans DESC
+        LIMIT 10
+
+	Copy and Paste the Result Below:
+
++------+-----------+
+| fans | name      |
++------+-----------+
+|  503 | Amy       |
+|  497 | Mimi      |
+|  311 | Harald    |
+|  253 | Gerald    |
+|  173 | Christine |
+|  159 | Lisa      |
+|  133 | Cat       |
+|  126 | William   |
+|  124 | Fran      |
+|  120 | Lissa     |
++------+-----------+
+		
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+Yes the groups I analyzed do have a different distribution of hours as the lower number 
+of business stars especially the 2.5 business stars hours seem to have more hours.
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+Yes the businesses I did analyze do seem to have a different number of reviews as the higher ratings especially the 4
+ratings have more reviews.
+
+
+Yes the two groups I chose to analyze do have a different number of reviews as businesses with 4-5 stars have more reviews than businesses with 2-3 stars.
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
+I could infer that location for these groups shows that Active Life and Shopping is more popular than beauty and spas in Las Vegas.
+SQL code used for analysis:
+
+Code:
+/* First we select the categories we need from business, category, and hours */
+SELECT
+business.city
+, category.category
+, business.stars
+,hours.hours,
+business.review_count,
+business.address
+/* We inner join the three tables together based on the common id's */
+FROM category INNER JOIN business ON category.business_id = business.id 
+INNER JOIN hours ON hours.business_id = category.business_id
+/* Then we check for the conditions we want as well as the star range */
+WHERE business.city = 'Las Vegas' OR category.category = "Chicken Wings" AND business.stars >= 2 AND business.stars <= 3
+/* Then we group by stars to see the pattern for the stars between 2 and 3 */
+GROUP BY business.stars
+UNION
+/* We do the same procedure except for stars between range 4 and 5 and we union them together*/
+SELECT
+business.city
+, category.category
+, business.stars
+,hours.hours,
+business.review_count,
+business.address
+FROM category INNER JOIN business ON category.business_id = business.id 
+INNER JOIN hours ON hours.business_id = category.business_id
+WHERE business.city = 'Las Vegas' OR category.category = "Chicken Wings" AND business.stars >= 4 And business.stars <= 5
+GROUP BY business.stars;
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+The business that are open have a slightly higher checkin count.
+         
+         
+ii. Difference 2:
+The businesses that are open also have a higher checkin count
+
+
+The maximum amount of stars as well as average stars and maximum review count are greater for companies that are open.
+The minimum stars as well as review count and average review count are greater for companies that are closed.
+
+
+         
+         
+         
+SQL code used for analysis:
+/* We select attributes we need as well as the min, max, and average of attributes we want
+based on whether the business is open */
+
+SELECT Business.is_open,
+       AVG(Checkin.count),
+       MAX(Checkin.count),
+       MIN(Checkin.count),
+       MAX(business.stars),
+       AVG(business.stars),
+       MIN(business.stars),
+       MIN(business.review_count),
+       MAX(business.review_count),
+       AVG(business.review_count)
+/* We want to inner join business with checkin based on common id's  and then group by which is open
+to investigate the different statistics for businesses that are open and those that are not open */
+FROM Business INNER JOIN checkin ON Business.id = checkin.business_id
+GROUP By Business.is_open
+
+	
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+The type of analysis I chose to do was to investigate what the most popular categories were and see the relatiob between 
+the average number of stars and review count with the total number of categories.
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+         For my analysis I need to use both the Category and the Business dataset. I first want to create a new column to find the 
+frequency for each category in my category dataset and then make sure to group by the category. I do this using the count function on Category, since the count
+function calculates the number of rows in the dataset that contain non null values.I want to join the 
+Business and Category dataset where the Business id is equal to the Category Business id. I also want to find the Average for the 
+Business Stars and review count for each of the categories. In order to find which categories that are most popular I have to order
+the categories in descending order. I chose this data as I wanted to see if there was any correlation between the most
+popular categories and the average number of business stars and review counts. From the data table there doesn't seem to be any correlation
+between the frequency of categories and business stars as well as review counts, so category doesn't seem to be an important
+measure of how a business is going to do.
+                           
+                  
+iii. Output of your finished dataset:
++---------------------------+--------------+---------------------+----------------------------+
+| category                  | New_Category | AVG(Business.stars) | AVG(Business.review_count) |
++---------------------------+--------------+---------------------+----------------------------+
+| Restaurants               |           71 |       3.45774647887 |              63.4366197183 |
+| Shopping                  |           30 |       3.98333333333 |              32.5666666667 |
+| Food                      |           23 |       3.78260869565 |              77.4347826087 |
+| Nightlife                 |           20 |               3.475 |                      67.55 |
+| Bars                      |           17 |                 3.5 |              77.7647058824 |
+| Health & Medical          |           17 |       4.08823529412 |              11.9411764706 |
+| Home Services             |           16 |                 4.0 |                      5.875 |
+| Beauty & Spas             |           13 |       3.88461538462 |              9.15384615385 |
+| Local Services            |           12 |       4.20833333333 |              8.33333333333 |
+| American (Traditional)    |           11 |       3.81818181818 |              102.545454545 |
+| Active Life               |           10 |                4.15 |                       13.1 |
+| Automotive                |            9 |                 4.5 |                       22.0 |
+| Hotels & Travel           |            9 |       3.22222222222 |              42.3333333333 |
+| Burgers                   |            8 |               3.125 |                     37.125 |
+| Sandwiches                |            8 |              3.9375 |                     121.75 |
+| Arts & Entertainment      |            7 |                 4.0 |              55.4285714286 |
+| Fast Food                 |            7 |       3.21428571429 |              26.4285714286 |
+| Mexican                   |            7 |                 3.5 |              46.7142857143 |
+| American (New)            |            6 |       3.33333333333 |              80.1666666667 |
+| Event Planning & Services |            6 |                3.75 |              19.6666666667 |
+| Hair Salons               |            6 |       4.08333333333 |              10.8333333333 |
+| Bakeries                  |            5 |                 4.1 |                       47.8 |
+| Doctors                   |            5 |                 4.2 |                       11.0 |
+| Indian                    |            5 |                 3.6 |                       12.6 |
+| Japanese                  |            5 |                 3.8 |                       30.4 |
++---------------------------+--------------+---------------------+----------------------------+
+
+iv. Provide the SQL code you used to create your final dataset:
+/* We select the categories we need and we set up a new category to set up a
+counter for the categories. We then need to get average business and review count. */
+SELECT Category.Category,
+COUNT(Category.Category) AS New_Category,
+AVG(Business.stars),
+AVG(Business.review_count)
+/* Join category and Business together based on the id. */
+FROM Category Inner Join Business on Business.id = Category.Business_id
+/* We then group by the category to help investigate which is the
+most popular category and we order by the category frequency in 
+a descending order to investigate which categories are more popular than
+others. We only want to see first 25 rows as that is the max we can see in
+sql output. */
+GROUP BY Category
+ORDER BY New_Category DESC
+LIMIT 25
